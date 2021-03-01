@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -87,12 +90,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sb.append(line);
             }
 
+
             JSONArray jsonArray = new JSONArray(sb.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String title = jsonObject.getString("Title");
-                String notecontent = jsonObject.getString("Content");
-                String timestamp = (jsonObject.getString("Timestamp"));
+                String notecontent = jsonObject.getString("NoteContent");
+                String timestamp = (jsonObject.getString("timestamp"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     noteList.add(new Note(title, notecontent, timestamp));
                 }
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         try {
             FileOutputStream fos = getApplicationContext().openFileOutput(getString(R.string.file_name), Context.MODE_PRIVATE);
+
             PrintWriter printWriter = new PrintWriter(fos);
             printWriter.print(noteArrayList);
             printWriter.close();
@@ -177,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
     public void openAddPage() {
         Intent intent = new Intent(this, AddNotesActivity.class);

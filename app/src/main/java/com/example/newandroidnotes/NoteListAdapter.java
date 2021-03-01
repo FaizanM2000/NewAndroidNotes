@@ -23,7 +23,7 @@ public class NoteListAdapter  extends RecyclerView.Adapter<NoteViewHolder> {
                 .inflate(R.layout.note_layout, parent, false);
 
         itemView.setOnClickListener(mainActivity);
-        itemView.setOnClickListener(mainActivity);
+        //itemView.setOnClickListener(mainActivity);
 
 
         return new NoteViewHolder(itemView);

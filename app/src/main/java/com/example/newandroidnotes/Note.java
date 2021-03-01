@@ -50,11 +50,12 @@ public class Note implements Serializable {
         try{
             StringWriter sw = new StringWriter();
             JsonWriter jsonWriter = new JsonWriter(sw);
-            jsonWriter.setIndent(" ");
             jsonWriter.beginObject();
+            jsonWriter.setIndent(" ");
             jsonWriter.name("Title").value(getTitle());
             jsonWriter.name("NoteContent").value(getNoteText());
-            jsonWriter.name("timestamp").value(getLastSaveDate().toString());
+            jsonWriter.name("timestamp").value(getLastSaveDate());
+            jsonWriter.endObject();
             return sw.toString();
 
         }catch(IOException e){
@@ -70,3 +71,10 @@ public class Note implements Serializable {
 
 
 }
+
+
+
+
+
+
+
