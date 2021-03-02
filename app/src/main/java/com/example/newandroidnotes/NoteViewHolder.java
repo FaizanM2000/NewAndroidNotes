@@ -4,6 +4,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 public class NoteViewHolder extends RecyclerView.ViewHolder{
 
     TextView title;

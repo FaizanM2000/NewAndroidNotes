@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp"
-    android:background="#D7EADE"
-    android:onClick="editNote">
+    android:background="#D7EADE">
 
     <TextView
         android:id="@+id/noteLayoutTitle"

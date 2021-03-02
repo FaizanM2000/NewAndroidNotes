@@ -23,7 +23,7 @@ public class NoteListAdapter  extends RecyclerView.Adapter<NoteViewHolder> {
                 .inflate(R.layout.note_layout, parent, false);
 
         itemView.setOnClickListener(mainActivity);
-        //itemView.setOnClickListener(mainActivity);
+        itemView.setOnLongClickListener(mainActivity);
 
 
         return new NoteViewHolder(itemView);
@@ -42,4 +42,10 @@ public class NoteListAdapter  extends RecyclerView.Adapter<NoteViewHolder> {
     public int getItemCount() {
         return nlist.size();
     }
+
+    
+
+
+
+
 }

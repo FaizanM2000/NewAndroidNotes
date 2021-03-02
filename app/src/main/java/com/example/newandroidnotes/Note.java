@@ -8,11 +8,14 @@ import androidx.annotation.RequiresApi;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Note implements Serializable {
-    private final String title;
-    private final String noteText;
-    private final String lastSaveDate;
+    private String title;
+    private  String noteText;
+    private  String lastSaveDate;
 
     private static int notecount =0;
     public Note() {
@@ -25,19 +28,22 @@ public class Note implements Serializable {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Note(String title, String noteText, String timestamp){
-        LocalDateTime myDateObj = LocalDateTime.now();
+
         this.title = title;
         this.noteText = noteText;
         lastSaveDate =  timestamp;
-        notecount++;
+
 
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Note(String title, String noteText){
-        LocalDateTime myDateObj = LocalDateTime.now();
+        DateFormat dateFormat = new SimpleDateFormat("hh.mm aa");
+        String dateString = dateFormat.format(new Date()).toString();
+        SimpleDateFormat time = new SimpleDateFormat("EEE, dd/MM/yyyy");
+        String daystring = time.format(new Date());
         this.title = title;
         this.noteText = noteText;
-        lastSaveDate =  myDateObj.toString();
+        lastSaveDate =  daystring+" "+dateString;
         notecount++;
 
     }
@@ -64,7 +70,17 @@ public class Note implements Serializable {
         return "";
     }
 
+    public void setTitle(String t){
+        this.title = t;
+    }
 
+    public void setNoteText(String txt){
+        this.noteText = txt;
+    }
+
+    public void setLastSaveDate(String date){
+        this.lastSaveDate = date;
+    }
 
 
 

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -48,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NoteListAdapter nAdapter;
     private static final int REQUEST_CODE_A = 1;
     private static final int REQUEST_CODE_B = 2;
-
+    public View v;
+    Note n;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +60,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView = findViewById(R.id.recycler);
 
         noteArrayList.addAll(loadFile());
-        nAdapter = new NoteListAdapter(this, noteArrayList);
+        nAdapter = new NoteListAdapter(this,noteArrayList);
         recyclerView.setAdapter(nAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         setTitle("Android Notes " + "(" + noteArrayList.size() + ")");
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void buildapp(){
+        noteArrayList.addAll(loadFile());
+        recyclerView.setAdapter(nAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setTitle("Android Notes " + "("+ noteArrayList.size()/2 +")");
+        
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -146,21 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onLongClick(View view) {
-        int pos = recyclerView.getChildLayoutPosition(view);
-        noteArrayList.remove(pos);
-
-        nAdapter.notifyDataSetChanged();
-
-        return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
 
     private void saveNote() {
         Log.d(TAG, "saveNote: saving to json file");
@@ -191,23 +187,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void editNote(View v) {
-        int pos = recyclerView.getChildLayoutPosition(v);
-        Note n = noteArrayList.get(pos);
-        Intent intent = new Intent(this, AddNotesActivity.class);
-        intent.putExtra("passedtitle", n.getTitle());
-        intent.putExtra("passedcontent", n.getNoteText());
 
-        startActivityForResult(intent, REQUEST_CODE_A);
-
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_A) {
             if (resultCode == RESULT_OK) {
-                //WHAT TO DO AFTER EDITED NOTE COMES BACK
+                if(data != null && data.hasExtra("Note")){
+                    Note updatednote = (Note) data.getSerializableExtra("Note");
+                    int pos = noteArrayList.indexOf(n);
+                    removeFromList(pos);
+                    updateToFront(updatednote);
+                    saveNote();
+                    buildapp();
+
+                }
+
+
             }
         }
         if (requestCode == REQUEST_CODE_B) {
@@ -218,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Note newnote = new Note(notetitle, notecontent);
                     noteArrayList.add(newnote);
                     saveNote();
+                    buildapp();
                 }
             }
         }
@@ -229,6 +227,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, InfoActivity.class);
         startActivity(intent);
 
+    }
+
+
+
+    public void onClick(View v){
+        Log.d(TAG, "onNoteClick: note clicked!");
+        int pos = recyclerView.getChildLayoutPosition(v);
+        n = noteArrayList.get(pos);
+        Intent intent = new Intent(this, AddNotesActivity.class);
+        intent.putExtra("note",n);
+        intent.putExtra("pos",pos);
+        startActivityForResult(intent, REQUEST_CODE_A);
+    }
+
+    public void removeFromList(int n){
+        if(!noteArrayList.isEmpty()){
+            noteArrayList.remove(n);
+            nAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void updateToFront(Note n){
+        noteArrayList.add(0,n);
+        nAdapter.notifyDataSetChanged();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public boolean onLongClick(View view) {
+
+        Log.d(TAG, "onLongClick: on long click happened");
+        int pos = recyclerView.getChildLayoutPosition(view);
+        n = noteArrayList.get(pos);
+        noteArrayList.remove(n);
+        saveNote();
+        buildapp();
+
+        return false;
     }
 
 
