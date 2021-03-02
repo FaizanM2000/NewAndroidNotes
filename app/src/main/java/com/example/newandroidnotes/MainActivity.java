@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void buildapp(){
         noteArrayList.addAll(loadFile());
-        recyclerView.setAdapter(nAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //recyclerView.setAdapter(nAdapter);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        nAdapter.notifyDataSetChanged();
         setTitle("Android Notes " + "("+ noteArrayList.size()/2 +")");
         
     }
