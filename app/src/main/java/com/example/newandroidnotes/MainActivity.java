@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     Note newnote = new Note(notetitle, notecontent);
                     noteArrayList.add(newnote);
+                    updateToFront(newnote);
                     saveNote();
                     buildapp();
                 }
