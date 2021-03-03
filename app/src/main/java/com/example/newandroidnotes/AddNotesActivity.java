@@ -1,9 +1,11 @@
 package com.example.newandroidnotes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.net.Inet4Address;
@@ -35,6 +38,8 @@ public class AddNotesActivity extends AppCompatActivity {
 
         notetitle = findViewById(R.id.inputNoteTitle);
         notecontent = findViewById(R.id.inputNoteContent);
+        notetitle.setText("");
+        notecontent.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
         Intent intent = getIntent();
 
         if(intent.hasExtra("note"))
@@ -48,8 +53,9 @@ public class AddNotesActivity extends AppCompatActivity {
                 notetitle.setText(newtitle);
                 notecontent.setText(newcontent);
 
+
             }else{
-                Toast.makeText(this,"Finding note was unsuccessfull",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"none found",Toast.LENGTH_LONG).show();
             }
 
         }
@@ -73,9 +79,14 @@ public class AddNotesActivity extends AppCompatActivity {
     }
 
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void savenote(){
         if(newnote== null){
+            if(notetitle.getText().toString()==""){
+                showAlertDialog();
+            }
             Log.d(TAG, "savenote: proceeding to save note");
             Intent data = new Intent();
             data.putExtra("returnednotetitle",notetitle.getText().toString());
@@ -92,7 +103,65 @@ public class AddNotesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if(newnote==null){
+            showAlertDialog();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Exit without making changes?");
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    savenote();
+                }
+            });
+            builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    returntomain();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+
+
+        }
+
+
+
+    }
+
+    public void showAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Error");
+        builder.setMessage("Note will not be saved without title!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                returntomain();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                notetitle.setText("");
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    public void returntomain(){
+        Log.d(TAG, "returntomain: no note made");
+        Intent data = new Intent();
+        setResult(RESULT_CANCELED,data);
+        finish();
     }
 
     @Override
@@ -107,13 +176,12 @@ public class AddNotesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected: optionsitem selected");
         int id = item.getItemId();
-        if(id==R.id.savebutton){
+        if (id == R.id.savebutton) {
             savenote();
             return true;
         }
         return true;
     }
-
 
 
 }

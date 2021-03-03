@@ -3,6 +3,7 @@ package com.example.newandroidnotes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -180,14 +182,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     public void openAddPage() {
         Intent intent = new Intent(this, AddNotesActivity.class);
         startActivityForResult(intent, REQUEST_CODE_B);
 
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -207,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
+            if(requestCode == RESULT_CANCELED){
+                buildapp();
+            }
         }
         if (requestCode == REQUEST_CODE_B) {
             if (resultCode == RESULT_OK) {
@@ -219,6 +221,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     buildapp();
                 }
             }
+            if(requestCode == RESULT_CANCELED){
+
+                buildapp();
+            }
         }
 
 
@@ -229,8 +235,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
 
     }
-
-
 
     public void onClick(View v){
         Log.d(TAG, "onNoteClick: note clicked!");
@@ -260,12 +264,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "onLongClick: on long click happened");
         int pos = recyclerView.getChildLayoutPosition(view);
         n = noteArrayList.get(pos);
-        noteArrayList.remove(n);
-        saveNote();
-        buildapp();
 
-        return false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Delete?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                noteArrayList.remove(n);
+                saveNote();
+                nAdapter.notifyDataSetChanged();
+
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+       return false;
     }
+
 
 
 }
