@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 noteArrayList.remove(n);
                 saveNote();
                 nAdapter.notifyDataSetChanged();
+                setTitle("Android Notes " + "(" + noteArrayList.size() + ")");
 
             }
         });

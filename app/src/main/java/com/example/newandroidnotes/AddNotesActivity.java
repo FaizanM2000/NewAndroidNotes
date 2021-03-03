@@ -38,7 +38,6 @@ public class AddNotesActivity extends AppCompatActivity {
 
         notetitle = findViewById(R.id.inputNoteTitle);
         notecontent = findViewById(R.id.inputNoteContent);
-        notetitle.setText("");
         notecontent.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
         Intent intent = getIntent();
 
@@ -84,15 +83,19 @@ public class AddNotesActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void savenote(){
         if(newnote== null){
-            if(notetitle.getText().toString()==""){
+
+            if(notetitle.getText().toString().isEmpty()){
                 showAlertDialog();
             }
-            Log.d(TAG, "savenote: proceeding to save note");
-            Intent data = new Intent();
-            data.putExtra("returnednotetitle",notetitle.getText().toString());
-            data.putExtra("returnednotecontent",notecontent.getText().toString());
-            setResult(RESULT_OK,data);
-            finish();
+            else{
+                Log.d(TAG, "savenote: proceeding to save note");
+                Intent data = new Intent();
+                data.putExtra("returnednotetitle",notetitle.getText().toString());
+                data.putExtra("returnednotecontent",notecontent.getText().toString());
+                setResult(RESULT_OK,data);
+                finish();
+            }
+
         }
         else{
            doReturn(v);
@@ -103,7 +106,7 @@ public class AddNotesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(newnote==null){
+        if(notetitle.getText().toString().isEmpty()){
             showAlertDialog();
         }
         else{
@@ -114,7 +117,13 @@ public class AddNotesActivity extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    savenote();
+                    if(notetitle.getText().toString().isEmpty()){
+                        showAlertDialog();
+                    }
+                    else{
+                        savenote();
+                    }
+
                 }
             });
             builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
