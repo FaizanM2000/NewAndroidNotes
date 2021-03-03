@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/infobackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000" >
+    android:background="@drawable/notes">
 
     <TextView
         android:id="@+id/infotext3"
@@ -12,7 +13,7 @@
         android:layout_height="55dp"
         android:layout_marginBottom="76dp"
         android:text="Version 1.0"
-        android:textColor="#D7EADE"
+        android:textColor="#000000"
         android:textColorLink="#D7EADE"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +26,7 @@
         android:layout_height="71dp"
         android:layout_marginTop="328dp"
         android:text="© 2021 Faizan Mohiuddin"
-        android:textColor="#D7EADE"
+        android:textColor="#000000"
         android:textColorLink="#D7EADE"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +40,7 @@
         android:layout_marginTop="148dp"
         android:fontFamily="monospace"
         android:text="Android Notes"
-        android:textColor="#D7EADE"
+        android:textColor="#000000"
         android:textColorLink="#D7EADE"
         android:textSize="45sp"
         app:layout_constraintEnd_toEndOf="parent"

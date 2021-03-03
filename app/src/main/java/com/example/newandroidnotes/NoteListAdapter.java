@@ -33,8 +33,16 @@ public class NoteListAdapter  extends RecyclerView.Adapter<NoteViewHolder> {
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         Note n = nlist.get(position);
         holder.title.setText(n.getTitle());
-        holder.content.setText(n.getNoteText());
-        holder.datetime.setText(n.getLastSaveDate().toString());
+        String contentdisplay = n.getNoteText();
+        if(contentdisplay.length()>80){
+            String newdisplay = contentdisplay.substring(0,80)+"...";
+            holder.content.setText(newdisplay);
+        }
+        else{
+            holder.content.setText(n.getNoteText());
+        }
+
+        holder.datetime.setText(n.getLastSaveDate());
 
     }
 

@@ -38,7 +38,8 @@ public class AddNotesActivity extends AppCompatActivity {
 
         notetitle = findViewById(R.id.inputNoteTitle);
         notecontent = findViewById(R.id.inputNoteContent);
-        notecontent.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
+        notecontent.setGravity(Gravity.CLIP_HORIZONTAL);
+        notecontent.canScrollVertically(1);
         Intent intent = getIntent();
 
         if(intent.hasExtra("note"))
@@ -135,11 +136,7 @@ public class AddNotesActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
 
-
-
         }
-
-
 
     }
 
